@@ -3,6 +3,10 @@ if not data.raw["utility-constants"] then
   return
 end
 
+if settings.startup["SUB-Alternatives"].value == "steel-recycle" then
+  return
+end
+
 -- This auto-generates barrel items and fill/empty recipes for every fluid defined that doesn't have "auto_barrel = false".
 
 -- The technology the barrel unlocks will be added to

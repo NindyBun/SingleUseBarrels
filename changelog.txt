@@ -1,5 +1,10 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.0a
+Version: 1.0.2
+Date: 31 December 2023
+  Info:
+    - Added an alternative recipe to recycle empty barrels
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
 Date: 26 December 2023
   Info:
     - Fixed translations

@@ -1,24 +1,28 @@
-local T = {}
-T.type = "technology"
-T.name = "SUB-fluid-handling"
-T.icon = "__SingleUseBarrels__/graphics/empty-barrel.png"
-T.icon_size = 64
-T.icon_mipmaps = 4
-T.prerequisites = {"chemical-science-pack"}
-T.effects = {
-    {
-        type  = "unlock-recipe",
-        recipe = "SUB-empty-barrel"
-    },
-}
-T.unit = {
-    count = 50,
-    time = 15,
-    ingredients = {
-        {"automation-science-pack", 1},
-        {"logistic-science-pack", 1},
-        {"chemical-science-pack", 1},
+if settings.startup["SUB-Alternatives"].value == "plastic-barrel" then
+    local T = {}
+    T.type = "technology"
+    T.name = "SUB-fluid-handling"
+    T.icon = "__SingleUseBarrels__/graphics/empty-barrel.png"
+    T.icon_size = 64
+    T.icon_mipmaps = 4
+    T.prerequisites = {"chemical-science-pack"}
+    T.effects = {
+        {
+            type  = "unlock-recipe",
+            recipe = "SUB-empty-barrel"
+        },
     }
-}
-T.order = "a-z"
-data:extend{T}
+    T.unit = {
+        count = 50,
+        time = 15,
+        ingredients = {
+            {"automation-science-pack", 1},
+            {"logistic-science-pack", 1},
+            {"chemical-science-pack", 1},
+        }
+    }
+    T.order = "a-z"
+    data:extend{T}
+elseif settings.startup["SUB-Alternatives"].value == "steel-recycle" then
+    table.insert(data.raw["technology"]["fluid-handling"].effects, {type="unlock-recipe", recipe="SUB-recycle-steel-barrel"})
+end

@@ -18,3 +18,15 @@ data:extend({
         maximum_value = 2^16
     }
 })
+data:extend({
+    {
+        type = "string-setting",
+        name = "SUB-Alternatives",
+        setting_type = "startup",
+        default_value = "plastic-barrel",
+        allowed_values = {
+            "plastic-barrel",
+            "steel-recycle"
+        }
+    }
+})
