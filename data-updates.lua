@@ -2,11 +2,6 @@
 if not data.raw["utility-constants"] then
   return
 end
-
-if settings.startup["SUB-Alternatives"].value == "steel-recycle" then
-  return
-end
-
 -- This auto-generates barrel items and fill/empty recipes for every fluid defined that doesn't have "auto_barrel = false".
 
 -- The technology the barrel unlocks will be added to
@@ -89,7 +84,7 @@ local function create_barrel_item(name, fluid, empty_barrel_item)
   {
     type = "item",
     name = name,
-    localised_name = {"item-name.SUB-filled-barrel", fluid.localised_name or {"fluid-name." .. fluid.name}},
+    localised_name = {"item-name.SUB-filled-barrel", fluid.localised_name},
     icons = generate_barrel_icons(fluid, empty_barrel_item, barrel_side_mask, barrel_hoop_top_mask),
     icon_size = empty_barrel_item.icon_size,
     icon_mipmaps = empty_barrel_item.icon_mipmaps,
@@ -136,7 +131,7 @@ local function create_fill_barrel_recipe(item, fluid)
   {
     type = "recipe",
     name = "SUB-fill-" .. item.name,
-    localised_name = {"recipe-name.SUB-fill-barrel", fluid.localised_name or {"fluid-name." .. fluid.name}},
+    localised_name = {"recipe-name.SUB-fill-barrel", fluid.localised_name},
     category = "crafting-with-fluid",
     energy_required = energy_per_fill,
     subgroup = "SUB-fill-barrel-group",
@@ -166,7 +161,7 @@ local function create_empty_barrel_recipe(item, fluid)
   {
     type = "recipe",
     name = "SUB-empty-" .. item.name,
-    localised_name = {"recipe-name.SUB-empty-filled-barrel", fluid.localised_name or {"fluid-name." .. fluid.name}},
+    localised_name = {"recipe-name.SUB-empty-filled-barrel", fluid.localised_name},
     category = "crafting-with-fluid",
     energy_required = energy_per_empty,
     subgroup = "SUB-empty-filled-barrel-group",
@@ -296,7 +291,20 @@ local function process_fluids(fluids, technology, empty_barrel_item)
 
 end
 
-process_fluids(data.raw["fluid"], get_technology(technology_name), get_item(empty_barrel_name))
+if settings.startup["SUB-Alternatives"].value == "plastic-barrel" then
+  process_fluids(data.raw["fluid"], get_technology(technology_name), get_item(empty_barrel_name))
+elseif settings.startup["SUB-Alternatives"].value == "steel-recycle" then
+  for name, fluid in pairs(data.raw["fluid"]) do
+    if fluid.auto_barrel == false then goto next end
+    data.raw["item"]["empty-barrel"].stack_size = settings.startup["SUB-stack-size"].value
+    data.raw["item"][fluid.name.."-barrel"].stack_size = settings.startup["SUB-stack-size"].value
+    data.raw["recipe"]["empty-"..fluid.name.."-barrel"].results[1].amount = fluid_per_barrel
+    data.raw["recipe"]["empty-"..fluid.name.."-barrel"].results[1].catalyst_amount = fluid_per_barrel
+    data.raw["recipe"]["fill-"..fluid.name.."-barrel"].ingredients[1].amount = fluid_per_barrel
+    data.raw["recipe"]["fill-"..fluid.name.."-barrel"].ingredients[1].catalyst_amount = fluid_per_barrel
+    ::next::
+  end
+end
 
 -- data.raw["tile"]["water-mud"] = nil
 -- util.remove_tile_references(data, { "water-mud" })
